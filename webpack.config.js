@@ -6,71 +6,90 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin= require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const isDev = process.env.NODE_ENV==='production'?false:true;
-const conf = {
-    entry: {
-        vendor: ['angular','angular-ui-router'],
-        app: './src/app.js',
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[hash:8].js',
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: path.resolve(__dirname, 'src/app.js')
-            }
-        ]
-    },
-    plugins:[
-        new CleanWebpackPlugin(
-            ['dist/*.*'],　
-            {
-                root: __dirname,
-                verbose:  true,
-                dry:      false
-            }
-        ),
-        new HtmlWebpackPlugin(
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-        ),
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, 'src/views'),
-                to: path.resolve(__dirname, 'dist/views')
-            }
-        ])
-    ],
-    optimization:{
-        runtimeChunk: {
-            name: "manifest"
+module.exports=function(env, argv){
+    const isDev = argv.mode==='production'?false:true;
+    const conf = {
+        entry: {
+            vendor: ['angular','angular-ui-router'],
+            app: './src/app.js',
         },
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: "vendor",
-                    chunks: "all"
+        output: {
+            path: path.resolve(__dirname, 'dist'),
+            filename: '[name].[hash:8].js',
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    include: path.resolve(__dirname, 'src/app.js')
+                },
+                {
+                    test: /\.css$/,
+                    use:[
+                        MiniCssExtractPlugin.loader,
+                        'css-loader'
+                    ]
                 }
-            }
+            ]
+        },
+        plugins:[
+            new CleanWebpackPlugin(['dist']),
+            new HtmlWebpackPlugin(),
+            new CopyWebpackPlugin([
+                {
+                    from: path.resolve(__dirname, 'src/views'),
+                    to: path.resolve(__dirname, 'dist/views')
+                }
+            ])
+        ],
+        optimization:{
+            runtimeChunk: {
+                name: "manifest"
+            },
+            splitChunks: {
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: "vendor",
+                        chunks: "all"
+                    },
+                    // styles: {
+                    //     name: 'styles',
+                    //     test: /\.css$/,
+                    //     chunks: 'all',
+                    //     enforce: true
+                    // },
+                },
+            },
         }
-    }
-};
-if(isDev){
-    conf.devServer={
-        host:'0.0.0.0',
-        port:8080,
-        hot:true,
-        open: true,
-        contentBase: path.join(__dirname, "dist")
     };
-    conf.plugins.push(new webpack.HotModuleReplacementPlugin())
-    // conf.devtool= 'eval-source-map'
-}else{
-    conf.output.filename='[name].[chunkhash:8].js';
-}
-
-module.exports=conf;
+    if(isDev){
+        console.log('---------development---------------')
+        conf.devServer={
+            port:8080,
+            hot:true,
+            open: true,
+            contentBase: './dist'
+        };
+        conf.plugins.push(new webpack.HotModuleReplacementPlugin());
+        conf.plugins.push(
+            new MiniCssExtractPlugin({
+                filename: "[name][hash].css",
+                chunkFilename: "[id][hash].css"
+            })
+        )
+        // conf.devtool= 'eval-source-map'
+    }else{
+        console.log('---------production---------------')
+        conf.output.filename='[name].[chunkhash:8].js';
+        conf.plugins.push(
+            new MiniCssExtractPlugin({
+                filename: "[name][chunkhash:8].css"
+            })
+        );
+    }
+    return conf;
+};
