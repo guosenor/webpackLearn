@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin= require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const isDev = process.env.NODE_ENV==='production'?false:true;
 const conf = {
     entry: {
         vendor: ['angular','angular-ui-router'],
@@ -13,7 +14,7 @@ const conf = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[chunkhash:8].js',
+        filename: '[name].[hash:8].js',
     },
     module: {
         rules: [
@@ -58,5 +59,18 @@ const conf = {
         }
     }
 };
+if(isDev){
+    conf.devServer={
+        host:'0.0.0.0',
+        port:8080,
+        hot:true,
+        open: true,
+        contentBase: path.join(__dirname, "dist")
+    };
+    conf.plugins.push(new webpack.HotModuleReplacementPlugin())
+    // conf.devtool= 'eval-source-map'
+}else{
+    conf.output.filename='[name].[chunkhash:8].js';
+}
 
 module.exports=conf;

@@ -4,5 +4,6 @@
 angular
     .module('app')
     .controller('MainPageController',['$scope',function ($scope) {
+        $scope.helloWorld='helloworld webpack angular1.xx';
         $scope.helloWorld='helloworld webpack angular1.x';
     }]);
