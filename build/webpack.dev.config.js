@@ -19,13 +19,13 @@ module.exports = merge(baseConf, {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "[name].css",
-            chunkFilename: "[id].css"
+            filename: "[name][hash].css"
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
     ],
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name].[hash].js',
+        filename: '[name].[hash].js'
     },
 });

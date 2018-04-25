@@ -5,3 +5,6 @@
     min-width: 800px;
     min-height: 800px;
 }
+.bigBgImage{
+    background-image: url("./images/brandBg.jpg");
+}

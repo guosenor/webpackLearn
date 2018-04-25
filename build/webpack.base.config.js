@@ -21,9 +21,27 @@ module.exports={
                 test: /\.css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "css-loader"
+                    {
+                        loader: 'css-loader',
+                        options: { sourceMap: true }
+                    }
+
                 ]
-            }
+            },
+            {
+                test:/\.(png)|(jpg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 100,
+                            name: 'css/images/[hash:8].[ext]',
+                            publicPath: './'
+                        }
+                    },
+                ],
+
+            },
         ],
     },
     plugins:[
