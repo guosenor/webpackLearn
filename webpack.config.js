@@ -12,7 +12,6 @@ module.exports=function(env, argv){
     const isDev = argv.mode==='production'?false:true;
     const conf = {
         entry: {
-            vendor: ['angular','angular-ui-router'],
             app: './src/app.js',
         },
         output: {
