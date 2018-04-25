@@ -2,7 +2,8 @@
  * Created by guosen on 2018/4/23.
  */
 
-import './css/commStyle.css'
+import './css/commStyle.css';
+import './css/main-page.css';
 
 import 'angular';
 import 'angular-ui-router';
