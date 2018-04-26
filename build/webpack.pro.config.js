@@ -21,6 +21,21 @@ module.exports = merge(baseConf, {
             new OptimizeCSSAssetsPlugin({})
         ]
     },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: { sourceMap: true }
+                    }
+
+                ]
+            }
+        ]
+    },
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].[chunkhash:8].css",

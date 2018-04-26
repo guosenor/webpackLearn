@@ -9,16 +9,30 @@ const baseConf = require('./webpack.base.config');
 
 module.exports = merge(baseConf, {
     mode: "development",
-    devServer:{
+    devServer: {
         port: 8080,
         hot: true,
         open: true,
         contentBase: 'dist'
     },
-    plugins:[
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    {loader: "style-loader"},
+                    {
+                        loader: "css-loader",
+                        options:{
+                            sourceMap:true
+                        }
+                    }
+                ]
+            },
+        ]
+    },
+    plugins: [
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
             filename: "[name][hash].css"
         }),
         new webpack.HotModuleReplacementPlugin(),

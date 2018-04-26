@@ -5,7 +5,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin= require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+console.log(path.resolve(__dirname,'../'));
 module.exports={
     entry: {
         app:'./src/app.js'
@@ -16,17 +17,6 @@ module.exports={
             {
                 test: /\.js$/,
                 loader: 'babel-loader'
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: { sourceMap: true }
-                    }
-
-                ]
             },
             {
                 test:/\.(png)|(jpg)$/,
@@ -45,6 +35,10 @@ module.exports={
         ],
     },
     plugins:[
+        new CleanWebpackPlugin(path.resolve(__dirname,'../dist'),{
+            root: path.resolve(__dirname,'../'),
+            verbose: true
+        }),
         new HtmlWebpackPlugin({
             title: 'webpack4.x  angular1.x '
         }),
@@ -52,6 +46,10 @@ module.exports={
             {
                 from: path.resolve(__dirname, '../src/views'),
                 to: path.resolve(__dirname, '../dist/views')
+            },
+            {
+                from: path.resolve(__dirname, '../src/images'),
+                to: path.resolve(__dirname, '../dist/images')
             }
         ])
     ],
