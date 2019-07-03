@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "webpack4.x for angular1.x",
   "scripts": {
-    "build": "webpack --config build/webpack.pro.config.js",
-    "dev": "webpack-dev-server --config build/webpack.dev.config.js",
+    "build": "./node_modules/.bin/webpack --config build/webpack.pro.config.js",
+    "dev": "./node_modules/.bin/webpack-dev-server --config build/webpack.dev.config.js",
     "init": "npm i --registry=https://registry.npm.taobao.org"
   },
   "repository": {
