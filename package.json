@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/guosenor/webpackLearn#readme",
   "dependencies": {
-    "angular": "^1.6.10",
+    "angular": "^1.7.9",
     "angular-ui-router": "^1.0.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
